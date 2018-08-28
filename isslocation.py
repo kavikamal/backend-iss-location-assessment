@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+
+"""ISS Location Finder
+Program obtains a list of the astronauts who are currently in space.
+It prints their full names, the spacecraft they are currently on board,
+and the total number of astronauts in space
+Prints current geographic coordinates (lat/lon) of
+the space station, along with a timestamp.
+In addition, it creates a graphics screen with the world map background image
+that displays the ISS's location.
+"""
+
 import requests
 import turtle
 import time
