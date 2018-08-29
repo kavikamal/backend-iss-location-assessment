@@ -50,16 +50,25 @@ def find_pass_time(req_url, lat_lon):
     data = r.json()
     print ("Next time the ISS will be overhead of Indianapolis IN: " +
            time.ctime(data['response'][0]['risetime']))
+    lat_lon['time'] = time.ctime(data['response'][0]['risetime'])
+    return lat_lon
 
 
-def create_iss_map(lat_lon):
+def create_iss_map(lat_lon, indy_lat_lon):
     latitude = float(lat_lon.get('latitude'))
     longitude = float(lat_lon.get('longitude'))
+    indy_lat = float(indy_lat_lon.get('latitude'))
+    indy_lon = float(indy_lat_lon.get('longitude'))
+    indy_arrival_time = indy_lat_lon.get('time')
     screen = turtle.Screen()
     screen.setup(720, 360)
     screen.setworldcoordinates(-180, -90, 180, 90)
     screen.bgpic('map.gif')
     iss = turtle.Turtle()
+    iss.setposition(indy_lon, indy_lat)
+    iss.dot(5, "yellow")
+    iss.color("white")
+    iss.write(indy_arrival_time, align='center', font=('courier', 10, 'bold'))
     screen.register_shape("rocket.gif")
     iss.shape("rocket.gif")
     iss.setheading(90)
@@ -74,8 +83,9 @@ def main():
     get_astronauts_list('http://api.open-notify.org/astros.json')
     lat_lon = find_geo_coords('http://api.open-notify.org/iss-now.json')
     indy_lat_lon = {"latitude": "39.768403", "longitude": "-86.158068"}
-    find_pass_time('http://api.open-notify.org/iss-pass.json', indy_lat_lon)
-    create_iss_map(lat_lon)
+    indy_lat_lon = find_pass_time(
+        'http://api.open-notify.org/iss-pass.json', indy_lat_lon)
+    create_iss_map(lat_lon, indy_lat_lon)
 
 
 if __name__ == '__main__':
